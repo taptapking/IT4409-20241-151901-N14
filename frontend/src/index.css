@@ -1,0 +1,130 @@
+/* App layout styling */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+}
+
+/* Menu styling */
+.menu {
+  width: 200px;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+.menu nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.menu nav ul li {
+  margin: 15px 0;
+}
+
+.menu nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Content area styling */
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.header {
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+}
+
+.header-nav {
+  display: flex; 
+  flex-direction: column; 
+  width: 100%; 
+}
+
+.header-links {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-content: flex-end; 
+}
+
+.header-links li {
+  margin: 0 15px;
+}
+
+.header-links li a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+.header-links li a:hover {
+  color: #f4f4f4;
+}
+
+.order-search-container {
+  display: flex; 
+  justify-content: flex-end; 
+  margin-top: 10px; 
+}
+
+.order-search {
+  display: flex;
+  align-items: center; 
+}
+
+.order {
+  margin-right: 10px;  
+}
+
+.search {
+  display: flex;        
+  align-items: center;  
+}
+
+.search input {
+  padding: 5px;
+  margin-right: 10px; 
+}
+
+.search button {
+  padding: 5px 10px;
+  background-color: #f4f4f4;
+  color: #333;
+  border: none;
+  cursor: pointer;
+}
+
+.search button:hover {
+  background-color: #ddd;
+}
+
+/* CardList styles */
+.card-list {
+  display: flex;
+  flex-direction: row; 
+  justify-content: flex-start; 
+}
+
+/* Shopping Card styles */
+.shopping-card {
+  border: 1px solid hsl(0, 0%, 80%);
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.1);
+  padding: 20px;
+  margin: 10px;
+  text-align: center;
+  max-width: 250px;
+  flex: 0 1 auto; 
+}
