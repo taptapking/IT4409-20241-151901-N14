@@ -1,4 +1,5 @@
-function Header() {
+import { Link } from "react-router-dom"; 
+function Header({ cart, removeFromCart, updateQuantity } ) {
     return (
         <header className="header">
             <nav className="header-nav">
@@ -13,7 +14,9 @@ function Header() {
                             <button type="button">Search</button>
                         </div>
                         <div className="order">
-                            <a href="#Giỏ hàng">Giỏ hàng</a>
+                            <Link to={{ pathname: "/cart", state: { cart, removeFromCart, updateQuantity } }}>
+                                Giỏ hàng ({cart.length})
+                            </Link>
                         </div>
                     </div>
                 </div>

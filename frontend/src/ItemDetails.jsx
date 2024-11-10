@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import mockItems from "./data/mockItems"; 
 
-function ItemDetails() {
+function ItemDetails({ addToCart }) {
     const { id } = useParams();
     const item = mockItems.find(item => item.id === parseInt(id)); 
 
@@ -18,6 +18,7 @@ function ItemDetails() {
                 <h2>{item.name}</h2>
                 <p>{item.description}</p>
                 <p>Price: {item.price}</p>
+                <button onClick={() => addToCart(item)}>Add to Cart</button>
             </div>
         </div>
     );
