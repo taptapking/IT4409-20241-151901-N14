@@ -1,11 +1,26 @@
-function Menu() {
+function Menu({ typeCounts, setFilteredByType }) {
     return (
         <aside className="menu">
             <nav>
+                <li>
+                        <a 
+                            href="#home" 
+                            onClick={() => setFilteredByType(null)}
+                        >
+                            Home
+                        </a>
+                </li>
                 <ul>
-                    <li><a href="#CD">CD</a></li>
-                    <li><a href="#DVD">DVD</a></li>
-                    <li><a href="#Book">Services</a></li>
+                    {Object.entries(typeCounts).map(([type, count]) => (
+                        <li key={type}>
+                            <a 
+                                href={`#${type}`}
+                                onClick={() => setFilteredByType(type)}
+                            >
+                                {type} ({count})
+                            </a>
+                        </li>
+                    ))}
                 </ul>
             </nav>
         </aside>
