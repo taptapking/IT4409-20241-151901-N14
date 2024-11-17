@@ -1,12 +1,13 @@
-// CardList.jsx
-import React from 'react';
 import ShoppingCard from './ShoppingCard';
-import mockItems from './data/mockItems';
 
-function CardList() {
+
+function CardList({ searchQuery,mockItems, }) {
+    const filteredItems = mockItems.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
     return (
         <div className="card-list">
-            {mockItems.map(item => (
+            {filteredItems.map(item => (
                 <ShoppingCard key={item.id} item={item} /> 
             ))}
         </div>

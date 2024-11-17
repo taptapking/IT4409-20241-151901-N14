@@ -1,5 +1,10 @@
 import { Link } from "react-router-dom"; 
-function Header({ cart, removeFromCart, updateQuantity } ) {
+
+function Header({ cart, searchQuery, setSearchQuery } ) {
+    const handleInputChange = (e) => {
+        setSearchQuery(e.target.value); // Update the search query dynamically
+    };
+
     return (
         <header className="header">
             <nav className="header-nav">
@@ -10,11 +15,16 @@ function Header({ cart, removeFromCart, updateQuantity } ) {
                 <div className="order-search-container">
                     <div className="order-search">
                         <div className="search">
-                            <input type="text" placeholder="Search..." />
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                value={searchQuery}
+                                onChange={handleInputChange} 
+                            />
                             <button type="button">Search</button>
                         </div>
                         <div className="order">
-                            <Link to={{ pathname: "/cart", state: { cart, removeFromCart, updateQuantity } }}>
+                            <Link to="/cart">
                                 Giỏ hàng ({cart.length})
                             </Link>
                         </div>
