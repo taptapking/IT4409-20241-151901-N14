@@ -3,6 +3,7 @@ const authRoutes = require('./routes/auth');
 const sequelize = require('./config/database');
 const User = require('./models/User');
 const orderRoutes = require('./routes/order');
+const paymentRoutes = require('./routes/payment');
 
 const app = express();
 
@@ -21,6 +22,7 @@ sequelize.sync()
 // Sử dụng auth routes cho các endpoint xác thực
 app.use('/api', authRoutes);
 app.use('/api', orderRoutes);
+app.use('/api', paymentRoutes);
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
