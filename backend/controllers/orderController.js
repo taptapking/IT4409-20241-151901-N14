@@ -71,6 +71,50 @@ const deleteOrder = async (req, res) => {
     }
 };
 
+exports.approveOrder = async (req, res) => {
+    try {
+      const { orderId } = req.params;
+  
+      // Cập nhật trạng thái đơn hàng thành 'Approved'
+      const order = await Order.findByIdAndUpdate(
+        orderId,
+        { status: 'Approved' },
+        { new: true }
+      );
+  
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+  
+      res.status(200).json({ message: 'Order approved successfully', order });
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error', error });
+    }
+  };
+
+
+  exports.rejectOrder = async (req, res) => {
+    try {
+      const { orderId } = req.params;
+  
+      // Cập nhật trạng thái đơn hàng thành 'Rejected'
+      const order = await Order.findByIdAndUpdate(
+        orderId,
+        { status: 'Rejected' },
+        { new: true }
+      );
+  
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+  
+      res.status(200).json({ message: 'Order rejected successfully', order });
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error', error });
+    }
+  };
+  
+
 module.exports = {
     getAllOrders,
     getOrderById,
