@@ -8,6 +8,7 @@ const router = express.Router();
 
 // API Đăng nhập
 router.post('/login', async (req, res) => {
+  try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ where: { email } });
@@ -20,6 +21,10 @@ router.post('/login', async (req, res) => {
 
     res.cookie('token', token, { httpOnly: true });
     return res.json({ message: 'Logged in successfully' });
+  } catch (error) {
+	console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 });
 
 // API Đăng xuất
