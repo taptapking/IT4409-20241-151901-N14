@@ -1,24 +1,26 @@
+import { Link } from "react-router-dom";
+
 function Menu({ typeCounts, setFilteredByType }) {
     return (
         <aside className="menu">
             <nav>
-                <li>
-                        <a 
-                            href="#home" 
+                <ul>
+                    <li>
+                        <Link 
+                            to="/" 
                             onClick={() => setFilteredByType(null)}
                         >
                             Home
-                        </a>
-                </li>
-                <ul>
+                        </Link>
+                    </li>
                     {Object.entries(typeCounts).map(([type, count]) => (
                         <li key={type}>
-                            <a 
-                                href={`#${type}`}
+                            <Link 
+                                to={`/${type}`}
                                 onClick={() => setFilteredByType(type)}
                             >
                                 {type} ({count})
-                            </a>
+                            </Link>
                         </li>
                     ))}
                 </ul>

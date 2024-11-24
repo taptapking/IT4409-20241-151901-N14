@@ -7,6 +7,7 @@ import CardList from "./CardList";
 import ItemDetails from "./ItemDetails";
 import Cart from "./Cart"; 
 import mockItems from "./data/mockItems";
+import CheckoutForm from "./Checkout";
 
 function App() {
     const [cart, setCart] = useState([]);
@@ -67,7 +68,7 @@ function App() {
                                 element={
                                     <>
                                         <h1>Items</h1>
-                                        <CardList searchQuery={searchQuery} mockItems = {filteredItems} filteredByType = {filteredByType}/>
+                                        <CardList searchQuery={searchQuery} mockItems={filteredItems} filteredByType={filteredByType}/>
                                     </>
                                 }
                             />
@@ -75,6 +76,11 @@ function App() {
                             <Route 
                                 path="/cart" 
                                 element={<Cart cart={cart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} />} 
+                            />
+                            <Route path="/checkout" element={<CheckoutForm />} />
+                            <Route 
+                                path="/:type" 
+                                element={<CardList searchQuery={searchQuery} mockItems={filteredItems} filteredByType={filteredByType} />} 
                             />
                         </Routes>
                     </div>

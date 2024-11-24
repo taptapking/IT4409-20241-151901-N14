@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Cart({ cart, removeFromCart, updateQuantity }) {
     const [localTotalPrice, setLocalTotalPrice] = useState(0);
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const total = cart.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -17,6 +19,15 @@ function Cart({ cart, removeFromCart, updateQuantity }) {
         const priceDifference = item.price * (newQuantity - item.quantity);
         setLocalTotalPrice((prevTotal) => prevTotal + priceDifference);
         updateQuantity(item.id, newQuantity); 
+    };
+
+    const handleCheckout = () => {
+        if (cart.length === 0) {
+            alert("Your cart is empty!");
+            return;
+        }
+
+        navigate("/checkout", { state: { cart, total: localTotalPrice } });
     };
 
     return (
@@ -50,6 +61,9 @@ function Cart({ cart, removeFromCart, updateQuantity }) {
             <div className="cart-total">
                 <h3>Total: ${localTotalPrice.toFixed(2)}</h3>
             </div>
+            <button onClick={handleCheckout} className="checkout-button">
+                    Proceed to Payment
+                </button>
         </div>
     );
 }
