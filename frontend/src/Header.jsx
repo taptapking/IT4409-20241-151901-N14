@@ -9,8 +9,8 @@ function Header({ cart, searchQuery, setSearchQuery } ) {
         <header className="header">
             <nav className="header-nav">
                 <ul className="header-links">
-                    <li><a href="#Đăng ký">Đăng ký</a></li>
-                    <li><a href="#Đăng nhập">Đăng nhập</a></li>
+                    <li><Link to="/signup">Đăng ký</Link></li>
+                    <li><Link to="/signin">Đăng nhập</Link></li>
                 </ul>
                 <div className="order-search-container">
                     <div className="order-search">
