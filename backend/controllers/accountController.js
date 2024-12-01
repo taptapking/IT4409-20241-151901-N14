@@ -149,3 +149,49 @@ exports.getAllAccounts = async (req, res) => {
         res.status(500).json({ message: 'Đã có lỗi xảy ra khi lấy danh sách tài khoản.' });
     }
 };
+
+
+
+// Hàm chặn tài khoản
+exports.blockAccount = async (req, res) => {
+    try {
+        const accountId = req.params.id;
+
+        // Tìm tài khoản cần chặn
+        const account = await Account.findByPk(accountId);
+        if (!account) {
+            return res.status(404).json({ message: 'Không tìm thấy tài khoản.' });
+        }
+
+        // Đặt trạng thái tài khoản thành "blocked"
+        account.status = 'blocked';
+        await account.save();
+
+        res.status(200).json({ message: 'Tài khoản đã bị chặn.' });
+    } catch (error) {
+        console.error('Error blocking account:', error);
+        res.status(500).json({ message: 'Đã có lỗi xảy ra khi chặn tài khoản.' });
+    }
+};
+
+// Hàm bỏ chặn tài khoản
+exports.unblockAccount = async (req, res) => {
+    try {
+        const accountId = req.params.id;
+
+        // Tìm tài khoản cần bỏ chặn
+        const account = await Account.findByPk(accountId);
+        if (!account) {
+            return res.status(404).json({ message: 'Không tìm thấy tài khoản.' });
+        }
+
+        // Đặt trạng thái tài khoản thành "active"
+        account.status = 'active';
+        await account.save();
+
+        res.status(200).json({ message: 'Tài khoản đã được bỏ chặn.' });
+    } catch (error) {
+        console.error('Error unblocking account:', error);
+        res.status(500).json({ message: 'Đã có lỗi xảy ra khi bỏ chặn tài khoản.' });
+    }
+};
