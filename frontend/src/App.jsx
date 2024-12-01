@@ -8,6 +8,8 @@ import ItemDetails from "./ItemDetails";
 import Cart from "./Cart"; 
 import mockItems from "./data/mockItems";
 import CheckoutForm from "./Checkout";
+import SignUp from "./SignUp";
+import SignIn from "./SignIn";
 
 function App() {
     const [cart, setCart] = useState([]);
@@ -82,6 +84,8 @@ function App() {
                                 path="/:type" 
                                 element={<CardList searchQuery={searchQuery} mockItems={filteredItems} filteredByType={filteredByType} />} 
                             />
+                            <Route path="/signup" element={<SignUp />} /> 
+                            <Route path="/signin" element={<SignIn />} /> 
                         </Routes>
                     </div>
                 </div>
