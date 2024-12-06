@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 
-function Header({ cart, searchQuery, setSearchQuery } ) {
+function Header({ cart, searchQuery, setSearchQuery }) {
     const handleInputChange = (e) => {
         setSearchQuery(e.target.value); // Update the search query dynamically
     };
@@ -11,6 +11,7 @@ function Header({ cart, searchQuery, setSearchQuery } ) {
                 <ul className="header-links">
                     <li><Link to="/signup">Đăng ký</Link></li>
                     <li><Link to="/signin">Đăng nhập</Link></li>
+                    <li><Link to="/admin">Admin</Link></li>
                 </ul>
                 <div className="order-search-container">
                     <div className="order-search">
@@ -19,7 +20,7 @@ function Header({ cart, searchQuery, setSearchQuery } ) {
                                 type="text"
                                 placeholder="Search..."
                                 value={searchQuery}
-                                onChange={handleInputChange} 
+                                onChange={handleInputChange}
                             />
                             <button type="button">Search</button>
                         </div>
