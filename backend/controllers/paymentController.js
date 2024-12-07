@@ -1,5 +1,5 @@
-const Payment = require('../models/Payment');
-const { initiatePayment, verifyPayment } = require('../services/paymentGateway');
+const Payment = require('../../models/Payment');
+const { initiatePayment, verifyPayment } = require('../../services/paymentGateway');
 
 exports.initiatePayment = async (req, res) => {
     const { orderId, amount, paymentGateway } = req.body;
