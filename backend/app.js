@@ -1,7 +1,7 @@
 const express = require('express');
 const authRoutes = require('./routes/auth');
 const sequelize = require('./config/database');
-const User = require('./models/User');
+const User = require('../models/User');
 const orderRoutes = require('./routes/order');
 const paymentRoutes = require('./routes/payment');
 
