@@ -1,21 +1,21 @@
-// middleware/auth.js
-const jwt = require('jsonwebtoken');
+const AuthService = require('../services/authService');
 
-const authenticate = (req, res, next) => {
-    // Lấy token từ header Authorization
-    const token = req.headers['authorization']?.split(' ')[1]; // Bearer <token>
-    if (!token) {
-        return res.status(401).json({ message: 'Access denied, token missing!' });
-    }
+exports.verifyToken = (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
     try {
-        // Xác minh token và giải mã để lấy thông tin người dùng
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded; // Lưu thông tin người dùng vào req để dùng ở các middleware/route sau
-        next(); // Cho phép truy cập vào endpoint tiếp theo
+        const decoded = AuthService.verifyToken(token);
+        req.user = decoded;
+        next();
     } catch (error) {
-        return res.status(403).json({ message: 'Invalid token!' });
+        res.status(403).json({ message: 'Invalid or expired token' });
     }
 };
 
-module.exports = { authenticate };
+exports.requireRole = (role) => (req, res, next) => {
+    if (req.user.role !== role) {
+        return res.status(403).json({ message: 'Forbidden: Insufficient permissions' });
+    }
+    next();
+};
