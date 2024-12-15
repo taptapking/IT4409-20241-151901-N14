@@ -1,17 +1,11 @@
-// models/DeliveryInfo.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
-const Invoice = require('./Invoice');
 
 const DeliveryInfo = sequelize.define('DeliveryInfo', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
-        references: {
-            model: Invoice,
-            key: 'id'
-        }
+        autoIncrement: true
     },
     name: {
         type: DataTypes.STRING(64),
