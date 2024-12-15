@@ -1,5 +1,5 @@
 const express = require('express');
-// const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/auth');
 // const User = require('../models/User');
 // const orderRoutes = require('./routes/order');
 // const paymentRoutes = require('./routes/payment');
@@ -55,7 +55,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', mediaRoutes);
     
 // Sử dụng auth routes cho các endpoint xác thực
-// app.use('/api', authRoutes);
+app.use('/api', authRoutes);
 // app.use('/api', orderRoutes);
 // app.use('/api', paymentRoutes);
 

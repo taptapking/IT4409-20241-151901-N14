@@ -1,36 +1,15 @@
 // routes/auth.js
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const User = require('../models/User');
+const AuthController = require('../controllers/authController');
 
 const router = express.Router();
 
-// API Đăng nhập
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
+router.post('/login', AuthController.login);
+router.post('/logout', AuthController.logout);
 
-    const user = await User.findOne({ where: { email } });
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) return res.status(401).json({ message: 'Incorrect password' });
-
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.cookie('token', token, { httpOnly: true });
-    return res.json({ message: 'Logged in successfully' });
-  } catch (error) {
-	console.error(error);
-        return res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-// API Đăng xuất
-router.post('/logout', (req, res) => {
-    res.clearCookie('token');
-    return res.json({ message: 'Logged out successfully' });
+// Protected route for admins
+router.get('/admin-only', verifyToken, requireRole('admin'), (req, res) => {
+    res.status(200).json({ message: 'Welcome, admin!' });
 });
 
 module.exports = router;
