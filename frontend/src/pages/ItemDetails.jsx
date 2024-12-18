@@ -85,7 +85,7 @@ function ItemDetails({ addToCart }) {
     };
 
     return (
-        <div className= "w-full bg-gray-600 p-6">
+        <div className= "w-full bg-gray-200 p-6">
         <div className="w-full bg-white shadow rounded-lg p-6 flex gap-6">
     <div className="w-[250px] relative flex flex-col">
         <img

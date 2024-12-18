@@ -10,11 +10,12 @@ exports.login = async (req, res) => {
         }
         
         const token = AuthService.generateToken(account);
-        res.status(200).json({ token, role: account.role });
+        res.status(200).json({ token, role: account.role,accountId: account.id  });
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
 
 exports.logout = async (req, res) => {
     try {

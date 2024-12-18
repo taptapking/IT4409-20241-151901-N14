@@ -8,13 +8,14 @@ import ItemDetails from "./pages/ItemDetails";
 import Cart from "./pages/Cart"; 
 import API_URL from "./config/apiConfig";  // Import API URL from config
 import CheckoutForm from "./pages/Checkout";
-import SignIn from "./pages/SignIn";
+import AccountDetails from "./pages/AccountDetails"
 
 function App() {
     const [cart, setCart] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredByType, setFilteredByType] = useState(null);
     const [mediaItems, setMediaItems] = useState([]);  // State to store fetched media items
+    const [token, setToken] = useState(null);
 
     useEffect(() => {
         // Fetch media items from the API
@@ -72,6 +73,8 @@ function App() {
                     updateQuantity={updateQuantity}
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
+                    setToken={setToken}
+                    token ={token}
                 />
                 <div className="main-content">
                     <Menu typeCounts={typeCounts} setFilteredByType={setFilteredByType} />
@@ -87,6 +90,7 @@ function App() {
                                 }
                             />
                             <Route path="/item/:category/:id" element={<ItemDetails addToCart={addToCart} />} />
+
                             <Route 
                                 path="/cart" 
                                 element={<Cart cart={cart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} />} 
@@ -96,7 +100,10 @@ function App() {
                                 path="/:category" 
                                 element={<CardList searchQuery={searchQuery} mediaItems={filteredItems} filteredByType={filteredByType} />} 
                             />
-                            <Route path="/account" element={<SignIn />} />
+                            <Route 
+                                path="/account/:accountId" 
+                                element={<AccountDetails token={token} />}  
+                            /> 
                         </Routes>
                     </div>
                 </div>

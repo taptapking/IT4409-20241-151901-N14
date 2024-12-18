@@ -1,14 +1,19 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "./Modal"; 
 import SignIn from "../pages/SignIn"; 
 import SignUp from "../pages/SignUp"; 
 
-function Header({ cart, searchQuery, setSearchQuery }) {
+function Header({ cart, searchQuery, setSearchQuery, setToken, token }) {
   const [isModalOpen, setModalOpen] = useState(false); 
-  const [isSignUp, setIsSignUp] = useState(false); 
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [accountId, setAccountId] = useState(null);
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-  const handleInputChange = (e) => {
+  const navigate = useNavigate();
+
+  const handleInputChange 
+  = (e) => {
     setSearchQuery(e.target.value); 
   };
 
@@ -22,6 +27,12 @@ function Header({ cart, searchQuery, setSearchQuery }) {
 
   const toggleForm = () => {
     setIsSignUp(!isSignUp); 
+  };
+
+  const handleLogout = () => {
+    setToken(null);
+    setAccountId(null);
+    navigate("/");
   };
 
   return (
@@ -40,20 +51,62 @@ function Header({ cart, searchQuery, setSearchQuery }) {
         </div>
         <div className="header-right">
           <ul className="header-links">
-            <li>
-            <Link onClick={() => { openModal(); setIsSignUp(false); }}>Account</Link>
-            </li>
-            <li><Link to="/cart">Giỏ hàng ({cart.length})</Link></li>
+          <li>
+  <div 
+    className="account-dropdown"
+    onMouseEnter={() => setDropdownVisible(true)} 
+    onMouseLeave={() => setDropdownVisible(false)} 
+  >
+    <Link
+      to="#"
+      onClick={(e) => { 
+        e.preventDefault(); 
+        if (!token) openModal(); 
+        setIsSignUp(false); 
+      }}
+    >
+      Account
+    </Link>
+
+    {token && isDropdownVisible && (
+      <div className={`dropdown-content ${isDropdownVisible ? 'show' : ''}`}>
+        <ul>
+          <li>
+            <Link to={`/account/${accountId}`}>Account Details</Link>
+          </li>
+          <li>
+            <Link
+              to="#"
+              onClick={(e) => { 
+                e.preventDefault();
+                handleLogout(); 
+              }}
+            >
+              Logout
+            </Link>
+          </li>
+        </ul>
+      </div>
+    )}
+  </div>
+</li>
+
+
+            <li><Link to="/cart">Cart ({cart.length})</Link></li>
           </ul>
         </div>
       </nav>
 
-      {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {isSignUp ? (
-          <SignUp toggleForm={toggleForm} /> // Render SignUp component
+          <SignUp toggleForm={toggleForm} />
         ) : (
-          <SignIn toggleForm={toggleForm} /> // Render SignIn component
+          <SignIn 
+            toggleForm={toggleForm} 
+            setToken={setToken} 
+            onLoginSuccess={closeModal} 
+            setAccountId={setAccountId} 
+          />
         )}
       </Modal>
     </header>

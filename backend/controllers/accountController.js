@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const Account = require('../models/Account');
 const Role = require('../models/Role');
 const AccountRole = require('../models/AccountRole');
+const DeliveryInfo = require('../models/DeliveryInfo')
 
 // Hàm thêm tài khoản mới
 exports.createAccount = async (req, res) => {
@@ -46,15 +47,18 @@ exports.createAccount = async (req, res) => {
 exports.updateAccount = async (req, res) => {
     try {
         const accountId = req.params.id;
-        const { email, password, status, roles } = req.body;
+        const { email, password, status, roles, deliveryInfo } = req.body;
 
         // Tìm tài khoản cần sửa
-        const account = await Account.findByPk(accountId);
+        const account = await Account.findByPk(accountId, {
+            include: DeliveryInfo // Ensure we load the associated DeliveryInfo
+        });
+
         if (!account) {
             return res.status(404).json({ message: 'Không tìm thấy tài khoản.' });
         }
 
-        // Cập nhật các trường thông tin
+        // Cập nhật các trường thông tin tài khoản
         if (email) {
             // Kiểm tra email đã tồn tại chưa
             const existingAccount = await Account.findOne({ where: { email } });
@@ -73,8 +77,6 @@ exports.updateAccount = async (req, res) => {
             account.status = status;
         }
 
-        await account.save();
-
         // Cập nhật vai trò (nếu có)
         if (roles) {
             const roleRecords = await Role.findAll({
@@ -84,6 +86,30 @@ exports.updateAccount = async (req, res) => {
             });
             await account.setRoles(roleRecords);
         }
+
+        // Cập nhật thông tin giao hàng nếu có
+        if (deliveryInfo) {
+            if (account.DeliveryInfo) {
+                // Cập nhật thông tin giao hàng nếu đã tồn tại
+                const delivery = account.DeliveryInfo;
+                delivery.name = deliveryInfo.name || delivery.name;
+                delivery.phone = deliveryInfo.phone || delivery.phone;
+                delivery.city = deliveryInfo.city || delivery.city;
+                delivery.email = deliveryInfo.email || delivery.email;
+                delivery.address = deliveryInfo.address || delivery.address;
+                delivery.instruction = deliveryInfo.instruction || delivery.instruction;
+                await delivery.save();
+            } else {
+                // Nếu chưa có thông tin giao hàng, tạo mới
+                console.log("No existing delivery info found. Creating new delivery info.");
+                await DeliveryInfo.create({
+                    ...deliveryInfo,
+                    accountId: account.id // Liên kết với tài khoản
+                });
+            }
+        }
+
+        await account.save();
 
         res.status(200).json({ message: 'Tài khoản được cập nhật thành công.', account });
     } catch (error) {
@@ -122,7 +148,7 @@ exports.getAccount = async (req, res) => {
         const accountId = req.params.id;
 
         const account = await Account.findByPk(accountId, {
-            include: Role
+            include: [Role, DeliveryInfo] // Include both Role and DeliveryInfo
         });
 
         if (!account) {
@@ -135,6 +161,7 @@ exports.getAccount = async (req, res) => {
         res.status(500).json({ message: 'Đã có lỗi xảy ra khi lấy thông tin tài khoản.' });
     }
 };
+
 
 // Hàm lấy tất cả tài khoản (tùy chọn)
 exports.getAllAccounts = async (req, res) => {

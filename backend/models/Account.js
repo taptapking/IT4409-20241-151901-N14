@@ -1,6 +1,7 @@
 // models/Account.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const bcrypt = require('bcrypt');
 
 const Account = sequelize.define('Account', {
     id: {
@@ -28,5 +29,11 @@ const Account = sequelize.define('Account', {
     tableName: 'Account',
     timestamps: false
 });
+
+Account.prototype.isPasswordValid = async function (password) {
+    return bcrypt.compare(password, this.password); 
+};
+
+Account.hasOne(require('./DeliveryInfo'), { foreignKey: 'accountId' });
 
 module.exports = Account;

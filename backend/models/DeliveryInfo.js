@@ -33,6 +33,14 @@ const DeliveryInfo = sequelize.define('DeliveryInfo', {
     instruction: {
         type: DataTypes.STRING(32),
         allowNull: true
+    },
+    accountId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'Account',
+            key: 'id'
+        },
+        allowNull: true 
     }
 }, {
     tableName: 'DeliveryInfo',
