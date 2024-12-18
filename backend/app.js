@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const authRoutes = require('./routes/auth');
 // const User = require('../models/User');
 // const orderRoutes = require('./routes/order');
@@ -48,7 +49,7 @@ sequelize.sync()
     .then(() => console.log('Models synchronized...'))
     .catch(err => console.log('Error syncing models: ' + err));
 
-    
+app.use(cors());    
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Sử dụng routes đã khai báo

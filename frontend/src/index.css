@@ -12,9 +12,11 @@
 
 /* Menu styling */
 .menu {
-  width: 200px;
+  width: 250px;
   background-color: #f4f4f4;
   padding: 20px;
+  font-family: 'Lato', sans-serif;
+  transition: width 0.3s ease;
 }
 
 .menu nav ul {
@@ -30,15 +32,26 @@
   text-decoration: none;
   color: #333;
   font-weight: bold;
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
-/* Content area styling */
-.content {
-  flex: 1;
-  padding: 20px;
-  background-color: #fff;
+/* Hover effect for menu items */
+.menu nav ul li a:hover {
+  background-color: #e0e0e0;
+  color: #000;
 }
 
+/* Font settings for the body */
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header layout */
 .header {
   background-color: #333;
   color: white;
@@ -46,9 +59,49 @@
 }
 
 .header-nav {
-  display: flex; 
-  flex-direction: column; 
-  width: 100%; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribute left and right sections */
+  width: 100%;
+}
+
+/* Center the search bar */
+.header-left {
+  display: flex;
+  justify-content: center; /* Center the search bar */
+  flex-grow: 1; /* Allow the search bar to take up available space */
+}
+
+/* Search bar container */
+.search {
+  display: flex;
+  align-items: center;
+  width: 500px; 
+  margin-left: 280px;
+}
+
+.search input {
+  padding: 5px;
+  margin-right: 10px;
+  flex-grow: 1; /* Make the input take up available space */
+}
+
+.search button {
+  padding: 5px 10px;
+  background-color: #f4f4f4;
+  color: #333;
+  border: none;
+  cursor: pointer;
+}
+
+.search button:hover {
+  background-color: #ddd;
+}
+
+/* Right side with account and cart links */
+.header-right {
+  display: flex;
+  justify-content: flex-end; /* Align the account and cart links to the right */
 }
 
 .header-links {
@@ -56,7 +109,6 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  justify-content: flex-end; 
 }
 
 .header-links li {
@@ -73,42 +125,22 @@
   color: #f4f4f4;
 }
 
-.order-search-container {
-  display: flex; 
-  justify-content: flex-end; 
-  margin-top: 10px; 
+/* Content area styling */
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  box-sizing: border-box;
 }
 
-.order-search {
-  display: flex;
-  align-items: center; 
+/* Menu adjustments for responsive design */
+@media (max-width: 768px) {
+  .menu {
+    width: 200px;
+  }
 }
 
-.order {
-  margin-right: 10px;  
-}
 
-.search {
-  display: flex;        
-  align-items: center;  
-}
-
-.search input {
-  padding: 5px;
-  margin-right: 10px; 
-}
-
-.search button {
-  padding: 5px 10px;
-  background-color: #f4f4f4;
-  color: #333;
-  border: none;
-  cursor: pointer;
-}
-
-.search button:hover {
-  background-color: #ddd;
-}
 
 /* CardList styles */
 .card-list {
@@ -239,10 +271,9 @@ button.submit-button:hover {
 .auth-container {
   max-width: 400px;
   margin: 50px auto;
-  padding: 20px;
+  padding: 5px 20px;
   border-radius: 10px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color:transparent;
   text-align: center;
   font-family: Arial, sans-serif;
 }
@@ -319,3 +350,189 @@ button.submit-button:hover {
 .auth-footer a:hover {
   text-decoration: underline;
 }
+
+/* Shopping Card styles */
+.shopping-card {
+  border: 1px solid hsl(0, 0%, 80%);
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.1);
+  padding: 20px;
+  margin: 10px;
+  text-align: center;
+  width: 300px;
+  height: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.shopping-card-image {
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.shopping-card h2 {
+  margin: 10px 0;
+  font-size: 1.2rem;
+}
+
+.shopping-card p {
+  margin: 5px 0;
+  font-size: 1rem;
+}
+
+.shopping-card a {
+  display: inline-block;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.shopping-card a:hover {
+  background-color: #45a049;
+}
+
+/*item details*/
+.w-full {
+  width: 100%;
+}
+
+.bg-white {
+  background-color: rgb(255 255 255);
+}
+
+.shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.rounded-lg {
+  border-radius: 24px;
+}
+
+.p-6 {
+  padding: 24px;
+}
+
+.flex {
+  display: flex;
+}
+
+.gap-6 {
+  gap: 24px;
+}
+
+.w-[350px] {
+  width: 350px;
+}
+
+.relative {
+  position: relative;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.rounded-md {
+  border-radius: 18px;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.text-lg {
+  font-size: 18px;
+  line-height: 27px;
+}
+
+.font-title {
+  font-family: Lato, ui-sans-serif, system-ui, sans-serif;
+}
+
+.mb-2 {
+  margin-bottom: 8px;
+}
+
+.mt-6 {
+  margin-top: 24px;
+}
+
+.px-6 {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.py-3 {
+  padding: 12px 0;
+}
+
+.bg-red-500 {
+  background-color: rgb(239 68 68);
+}
+
+.text-white {
+  color: rgb(255 255 255);
+}
+
+.rounded-md {
+  border-radius: 18px;
+}
+
+.hover\:bg-red-600:hover {
+  background-color: rgb(220 38 38);
+}
+
+/* Modal.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); 
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  z-index: 9999; 
+}
+
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  padding: 0px 20px; 
+  border-radius: 10px;
+  max-width: 500px; 
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+}
+
+
+

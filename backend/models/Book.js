@@ -25,7 +25,7 @@ const Book = sequelize.define('Book', {
         type: DataTypes.DATE,
         allowNull: false
     },
-    numer_of_page: {
+    number_of_page: {
         type: DataTypes.INTEGER,
         allowNull: true
     },

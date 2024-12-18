@@ -39,9 +39,9 @@ function Cart({ cart, removeFromCart, updateQuantity }) {
                 <ul className="cart-list">
                     {cart.map((item) => (
                         <li key={item.id} className="cart-item">
-                            <img src={item.image} alt={item.name} className="cart-item-image" />
+                            <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
                             <div className="cart-item-details">
-                                <h3>{item.name}</h3>
+                                <h3>{item.title}</h3>
                                 <p>Price: {item.price}</p>
                             </div>
                             <div>

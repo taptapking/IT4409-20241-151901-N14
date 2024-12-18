@@ -9,8 +9,16 @@ const path = require('path');
 class MediaController {
   // Create a new media item (Book, CD, or DVD)
   static async create(req, res) {
-    const mediaData = JSON.parse(req.body.mediaData);
-    const specificData = JSON.parse(req.body.specificData);
+    let mediaData = {};
+let specificData = {};
+
+try {
+  mediaData = JSON.parse(req.body.mediaData || '{}');
+  specificData = JSON.parse(req.body.specificData || '{}');
+} catch (error) {
+  return res.status(400).json({ error: 'Invalid JSON data in mediaData or specificData' });
+}
+
     const { type } = req.body;
 
     try {

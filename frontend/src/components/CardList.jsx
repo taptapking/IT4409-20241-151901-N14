@@ -1,9 +1,9 @@
 import ShoppingCard from './ShoppingCard';
 
 
-function CardList({ searchQuery,mockItems, }) {
-    const filteredItems = mockItems.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+function CardList({ searchQuery,mediaItems, }) {
+    const filteredItems = mediaItems.filter((item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
     return (
         <div className="card-list">

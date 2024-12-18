@@ -1,25 +1,37 @@
-import { useState } from "react"; 
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./Header";
-import Menu from "./Menu";
-import Footer from "./Footer";
-import CardList from "./CardList";
-import ItemDetails from "./ItemDetails";
-import Cart from "./Cart"; 
-import mockItems from "./data/mockItems";
-import CheckoutForm from "./Checkout";
-import SignUp from "./SignUp";
-import SignIn from "./SignIn";
+import Header from "./components/Header";
+import Menu from "./components/Menu";
+import Footer from "./components/Footer";
+import CardList from "./components/CardList";
+import ItemDetails from "./pages/ItemDetails";
+import Cart from "./pages/Cart"; 
+import API_URL from "./config/apiConfig";  // Import API URL from config
+import CheckoutForm from "./pages/Checkout";
+import SignIn from "./pages/SignIn";
 
 function App() {
     const [cart, setCart] = useState([]);
-    const [searchQuery, setSearchQuery] = useState(''); 
+    const [searchQuery, setSearchQuery] = useState('');
     const [filteredByType, setFilteredByType] = useState(null);
+    const [mediaItems, setMediaItems] = useState([]);  // State to store fetched media items
+
+    useEffect(() => {
+        // Fetch media items from the API
+        fetch(`${API_URL}/media`)
+            .then(response => response.json())
+            .then(data => {
+                // Extract mediaItems from the response and set them to state
+                setMediaItems(data.mediaItems || []);
+            })
+            .catch(error => {
+                console.error("Error fetching media items:", error);
+            });
+    }, []); // Empty dependency array to run the effect only once on mount
 
     const addToCart = (item) => {
         setCart((prevCart) => {
             const itemExists = prevCart.some(cartItem => cartItem.id === item.id);
-    
             if (itemExists) {
                 return prevCart;
             } else {
@@ -42,27 +54,27 @@ function App() {
         );
     };
 
-    const typeCounts = mockItems.reduce((acc, item) => {
-        acc[item.type] = (acc[item.type] || 0) + 1;
+    const typeCounts = mediaItems.reduce((acc, item) => {
+        acc[item.category] = (acc[item.category] || 0) + 1;
         return acc;
     }, {});
 
     const filteredItems = filteredByType
-    ? mockItems.filter((item) => item.type === filteredByType)
-    : mockItems;
+        ? mediaItems.filter((item) => item.category === filteredByType)
+        : mediaItems;
 
     return (
         <Router>
             <div className="app">
-                <Header 
-                    cart={cart} 
-                    removeFromCart={removeFromCart} 
-                    updateQuantity={updateQuantity} 
-                    searchQuery={searchQuery} 
-                    setSearchQuery={setSearchQuery} 
+                <Header
+                    cart={cart}
+                    removeFromCart={removeFromCart}
+                    updateQuantity={updateQuantity}
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
                 />
                 <div className="main-content">
-                    <Menu typeCounts={typeCounts}  setFilteredByType={setFilteredByType} />
+                    <Menu typeCounts={typeCounts} setFilteredByType={setFilteredByType} />
                     <div className="content">
                         <Routes>
                             <Route
@@ -70,22 +82,21 @@ function App() {
                                 element={
                                     <>
                                         <h1>Items</h1>
-                                        <CardList searchQuery={searchQuery} mockItems={filteredItems} filteredByType={filteredByType}/>
+                                        <CardList searchQuery={searchQuery} mediaItems={filteredItems} filteredByType={filteredByType}/>
                                     </>
                                 }
                             />
-                            <Route path="/item/:id" element={<ItemDetails addToCart={addToCart} />} /> 
+                            <Route path="/item/:category/:id" element={<ItemDetails addToCart={addToCart} />} />
                             <Route 
                                 path="/cart" 
                                 element={<Cart cart={cart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} />} 
                             />
                             <Route path="/checkout" element={<CheckoutForm />} />
                             <Route 
-                                path="/:type" 
-                                element={<CardList searchQuery={searchQuery} mockItems={filteredItems} filteredByType={filteredByType} />} 
+                                path="/:category" 
+                                element={<CardList searchQuery={searchQuery} mediaItems={filteredItems} filteredByType={filteredByType} />} 
                             />
-                            <Route path="/signup" element={<SignUp />} /> 
-                            <Route path="/signin" element={<SignIn />} /> 
+                            <Route path="/account" element={<SignIn />} />
                         </Routes>
                     </div>
                 </div>
@@ -94,5 +105,6 @@ function App() {
         </Router>
     );
 }
+
 
 export default App;
