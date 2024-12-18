@@ -1,25 +1,26 @@
-import { useState } from "react"; 
+import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./Header";
 import Menu from "./Menu";
 import Footer from "./Footer";
 import CardList from "./CardList";
 import ItemDetails from "./ItemDetails";
-import Cart from "./Cart"; 
+import Cart from "./Cart";
 import mockItems from "./data/mockItems";
 import CheckoutForm from "./Checkout";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
+import AdminHome from "./adminHome";
 
 function App() {
     const [cart, setCart] = useState([]);
-    const [searchQuery, setSearchQuery] = useState(''); 
+    const [searchQuery, setSearchQuery] = useState('');
     const [filteredByType, setFilteredByType] = useState(null);
 
     const addToCart = (item) => {
         setCart((prevCart) => {
             const itemExists = prevCart.some(cartItem => cartItem.id === item.id);
-    
+
             if (itemExists) {
                 return prevCart;
             } else {
@@ -48,21 +49,21 @@ function App() {
     }, {});
 
     const filteredItems = filteredByType
-    ? mockItems.filter((item) => item.type === filteredByType)
-    : mockItems;
+        ? mockItems.filter((item) => item.type === filteredByType)
+        : mockItems;
 
     return (
         <Router>
             <div className="app">
-                <Header 
-                    cart={cart} 
-                    removeFromCart={removeFromCart} 
-                    updateQuantity={updateQuantity} 
-                    searchQuery={searchQuery} 
-                    setSearchQuery={setSearchQuery} 
+                <Header
+                    cart={cart}
+                    removeFromCart={removeFromCart}
+                    updateQuantity={updateQuantity}
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
                 />
                 <div className="main-content">
-                    <Menu typeCounts={typeCounts}  setFilteredByType={setFilteredByType} />
+                    <Menu typeCounts={typeCounts} setFilteredByType={setFilteredByType} />
                     <div className="content">
                         <Routes>
                             <Route
@@ -70,22 +71,23 @@ function App() {
                                 element={
                                     <>
                                         <h1>Items</h1>
-                                        <CardList searchQuery={searchQuery} mockItems={filteredItems} filteredByType={filteredByType}/>
+                                        <CardList searchQuery={searchQuery} mockItems={filteredItems} filteredByType={filteredByType} />
                                     </>
                                 }
                             />
-                            <Route path="/item/:id" element={<ItemDetails addToCart={addToCart} />} /> 
-                            <Route 
-                                path="/cart" 
-                                element={<Cart cart={cart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} />} 
+                            <Route path="/item/:id" element={<ItemDetails addToCart={addToCart} />} />
+                            <Route
+                                path="/cart"
+                                element={<Cart cart={cart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} />}
                             />
                             <Route path="/checkout" element={<CheckoutForm />} />
-                            <Route 
-                                path="/:type" 
-                                element={<CardList searchQuery={searchQuery} mockItems={filteredItems} filteredByType={filteredByType} />} 
+                            <Route
+                                path="/:type"
+                                element={<CardList searchQuery={searchQuery} mockItems={filteredItems} filteredByType={filteredByType} />}
                             />
-                            <Route path="/signup" element={<SignUp />} /> 
-                            <Route path="/signin" element={<SignIn />} /> 
+                            <Route path="/signup" element={<SignUp />} />
+                            <Route path="/signin" element={<SignIn />} />
+                            <Route path="/admin" element={<AdminHome />} />
                         </Routes>
                     </div>
                 </div>
