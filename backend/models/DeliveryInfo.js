@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
-
 const DeliveryInfo = sequelize.define('DeliveryInfo', {
     id: {
         type: DataTypes.INTEGER,
@@ -18,13 +17,6 @@ const DeliveryInfo = sequelize.define('DeliveryInfo', {
     city: {
         type: DataTypes.STRING(64),
         allowNull: true
-    },
-    email: {
-        type: DataTypes.STRING(64),
-        allowNull: true,
-        validate: {
-            isEmail: true
-        }
     },
     address: {
         type: DataTypes.STRING(64),
@@ -46,5 +38,4 @@ const DeliveryInfo = sequelize.define('DeliveryInfo', {
     tableName: 'DeliveryInfo',
     timestamps: false
 });
-
 module.exports = DeliveryInfo;

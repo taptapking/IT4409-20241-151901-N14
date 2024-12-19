@@ -7,11 +7,11 @@ function AccountDetails({ token }) {
     const { accountId } = useParams();
     const [account, setAccount] = useState(null);
     const [deliveryInfo, setDeliveryInfo] = useState({
+        name: '',
+        phone: '',
         address: '',
         city: '',
-        postalCode: '',
-        phone: '',
-        country: '',
+        instruction: '',
     });
     const [loading, setLoading] = useState(true);
 
@@ -44,19 +44,17 @@ function AccountDetails({ token }) {
     const handleSaveChanges = () => {
         axios
             .put(`${API_URL}/account/${accountId}`, {
-                deliveryInfo,
+                email: account.email, 
+                deliveryInfo, 
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
             })
-            .then((response) => {
-                alert('Changes saved successfully');
-            })
             .catch((error) => {
                 console.error('Error saving changes:', error);
             });
-    };
+    };    
 
     if (loading) return <p>Loading account details...</p>;
 
@@ -73,7 +71,7 @@ function AccountDetails({ token }) {
             <div className="delivery-info-container">
                 <h3>Delivery Information</h3>
                 <form className="delivery-form">
-                    {["address", "city", "postalCode", "phone", "country"].map((field) => (
+                    {["name", "phone", "address", "city", "instruction"].map((field) => (
                         <div key={field} className="input-group">
                             <label htmlFor={field}>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
                             <input

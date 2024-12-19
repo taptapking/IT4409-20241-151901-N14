@@ -58,15 +58,6 @@ exports.updateAccount = async (req, res) => {
             return res.status(404).json({ message: 'Không tìm thấy tài khoản.' });
         }
 
-        // Cập nhật các trường thông tin tài khoản
-        if (email) {
-            // Kiểm tra email đã tồn tại chưa
-            const existingAccount = await Account.findOne({ where: { email } });
-            if (existingAccount && existingAccount.id !== accountId) {
-                return res.status(400).json({ message: 'Email đã được sử dụng.' });
-            }
-            account.email = email;
-        }
 
         if (password) {
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -87,27 +78,26 @@ exports.updateAccount = async (req, res) => {
             await account.setRoles(roleRecords);
         }
 
-        // Cập nhật thông tin giao hàng nếu có
-        if (deliveryInfo) {
+       
+        
             if (account.DeliveryInfo) {
                 // Cập nhật thông tin giao hàng nếu đã tồn tại
                 const delivery = account.DeliveryInfo;
-                delivery.name = deliveryInfo.name || delivery.name;
-                delivery.phone = deliveryInfo.phone || delivery.phone;
-                delivery.city = deliveryInfo.city || delivery.city;
-                delivery.email = deliveryInfo.email || delivery.email;
-                delivery.address = deliveryInfo.address || delivery.address;
-                delivery.instruction = deliveryInfo.instruction || delivery.instruction;
+                delivery.name = deliveryInfo.name;
+                delivery.phone = deliveryInfo.phone;
+                delivery.city = deliveryInfo.city ;
+                delivery.email = account.email;
+                delivery.address = deliveryInfo.address ;
+                delivery.instruction = deliveryInfo.instruction ;
                 await delivery.save();
             } else {
                 // Nếu chưa có thông tin giao hàng, tạo mới
-                console.log("No existing delivery info found. Creating new delivery info.");
                 await DeliveryInfo.create({
                     ...deliveryInfo,
                     accountId: account.id // Liên kết với tài khoản
                 });
             }
-        }
+        
 
         await account.save();
 

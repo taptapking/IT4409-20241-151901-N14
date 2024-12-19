@@ -10,7 +10,6 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST , // Máy chủ
     dialect: 'mysql',                         // Loại cơ sở dữ liệu
-    logging: false
   }
 );
 

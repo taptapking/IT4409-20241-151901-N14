@@ -34,6 +34,8 @@ Account.prototype.isPasswordValid = async function (password) {
     return bcrypt.compare(password, this.password); 
 };
 
-Account.hasOne(require('./DeliveryInfo'), { foreignKey: 'accountId' });
+const DeliveryInfo = require('./DeliveryInfo');
+Account.hasOne(DeliveryInfo, { foreignKey: 'accountId' });
+DeliveryInfo.belongsTo(Account, { foreignKey: 'accountId' });
 
 module.exports = Account;

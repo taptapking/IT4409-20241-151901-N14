@@ -4,10 +4,10 @@ import Modal from "./Modal";
 import SignIn from "../pages/SignIn"; 
 import SignUp from "../pages/SignUp"; 
 
-function Header({ cart, searchQuery, setSearchQuery, setToken, token }) {
+function Header({ cart, searchQuery, setSearchQuery, setToken, token,accountId,setAccountId }) {
   const [isModalOpen, setModalOpen] = useState(false); 
   const [isSignUp, setIsSignUp] = useState(false);
-  const [accountId, setAccountId] = useState(null);
+
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
   const navigate = useNavigate();
@@ -73,6 +73,9 @@ function Header({ cart, searchQuery, setSearchQuery, setToken, token }) {
         <ul>
           <li>
             <Link to={`/account/${accountId}`}>Account Details</Link>
+          </li>
+          <li>
+            <Link to={`/orders/${accountId}`}>Orders history</Link>
           </li>
           <li>
             <Link

@@ -46,7 +46,7 @@ function Cart({ cart, removeFromCart, updateQuantity }) {
                             </div>
                             <div>
                                 <button onClick={() => handleRemoveItem(item)} className="remove-item">
-                                    Remove
+                                    X
                                 </button>
                                 <div className="cart-item-quantity">
                                     <button onClick={() => handleUpdateQuantity(item, item.quantity - 1)}>-</button>

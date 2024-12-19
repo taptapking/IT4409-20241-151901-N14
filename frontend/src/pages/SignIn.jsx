@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import API_URL from "../config/apiConfig";
 import Cookies from 'js-cookie';
 
-function SignIn({ toggleForm, setToken, onLoginSuccess,setAccountId }) {
+function SignIn({ toggleForm, setToken, onLoginSuccess, setAccountId }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -11,7 +11,7 @@ function SignIn({ toggleForm, setToken, onLoginSuccess,setAccountId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setError("");
+    setError("");  
     setLoading(true);
 
     try {
@@ -36,7 +36,7 @@ function SignIn({ toggleForm, setToken, onLoginSuccess,setAccountId }) {
         Cookies.set('role', responseData.role, { expires: 7, secure: true, sameSite: 'Strict' });
 
         setToken(responseData.token);
-        setAccountId(responseData.accountId)
+        setAccountId(responseData.accountId);
         onLoginSuccess();
       }
     } catch (error) {

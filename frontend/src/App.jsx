@@ -9,6 +9,8 @@ import Cart from "./pages/Cart";
 import API_URL from "./config/apiConfig";  // Import API URL from config
 import CheckoutForm from "./pages/Checkout";
 import AccountDetails from "./pages/AccountDetails"
+import OrderList from "./pages/OrderList"
+import OrderDetails from "./pages/OrderDetails"
 
 function App() {
     const [cart, setCart] = useState([]);
@@ -16,6 +18,7 @@ function App() {
     const [filteredByType, setFilteredByType] = useState(null);
     const [mediaItems, setMediaItems] = useState([]);  // State to store fetched media items
     const [token, setToken] = useState(null);
+    const [accountId, setAccountId] = useState(null);
 
     useEffect(() => {
         // Fetch media items from the API
@@ -75,6 +78,8 @@ function App() {
                     setSearchQuery={setSearchQuery}
                     setToken={setToken}
                     token ={token}
+                    setAccountId = {setAccountId}
+                    accountId = {accountId}
                 />
                 <div className="main-content">
                     <Menu typeCounts={typeCounts} setFilteredByType={setFilteredByType} />
@@ -95,10 +100,17 @@ function App() {
                                 path="/cart" 
                                 element={<Cart cart={cart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} />} 
                             />
-                            <Route path="/checkout" element={<CheckoutForm />} />
+                            <Route  path="/orderdetails/:orderId" element={<OrderDetails accountId={accountId} token={token} />} />
+
+                            <Route path="/checkout" element={<CheckoutForm  accountId = {accountId} token ={token}/>} />
+                            <Route path="/orders/:accountId" element={<OrderList token={token} />} />
                             <Route 
                                 path="/:category" 
-                                element={<CardList searchQuery={searchQuery} mediaItems={filteredItems} filteredByType={filteredByType} />} 
+                                element={ 
+                                    <>   
+                                <h1>{filteredByType ? `${filteredByType}` : "Items"}</h1>
+                                <CardList searchQuery={searchQuery} mediaItems={filteredItems} filteredByType={filteredByType} />
+                                </>} 
                             />
                             <Route 
                                 path="/account/:accountId" 
