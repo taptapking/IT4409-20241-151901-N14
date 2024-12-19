@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const MediaForm = () => {
     const [type, setType] = useState('Book');
     const [mediaData, setMediaData] = useState({
-        category: '',
+        category: 'Book',
         price: '',
         quantity: '',
         weight: '',
@@ -15,7 +16,15 @@ const MediaForm = () => {
     const [image, setImage] = useState(null);
 
     const handleTypeChange = (e) => {
-        setType(e.target.value);
+        const selectedType = e.target.value;
+        setType(selectedType);
+    
+        // Update the category field based on the selected type
+        setMediaData((prevData) => ({
+            ...prevData,
+            category: selectedType,
+        }));
+    
         setSpecificData({}); // Reset specific data when type changes
     };
 
@@ -103,16 +112,21 @@ const MediaForm = () => {
 
     return (
         <div className="p-6 max-w-lg mx-auto">
+            <Link to="/admin">
+                <button className="admin"> 
+                    Return
+                </button>
+            </Link>
             <h1 className="text-2xl font-bold mb-4">Media Input Form</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <label>Type:
-                    <select className="border rounded p-2 w-full" value={type} onChange={handleTypeChange}>
+                    <select className="border rounded p-2 w-full" value={type} name="category" onChange={handleTypeChange}>
                         <option value="Book">Book</option>
                         <option value="DVD">DVD</option>
                         <option value="CD">CD</option>
                     </select>
                 </label><br />
-                <label>Category: <input className="border rounded p-2 w-full" type="text" name="category" value={mediaData.category} onChange={handleMediaDataChange} /></label><br />
+                <label style={{ display: 'none' }}>Category: <input className="border rounded p-2 w-full" type="text" name="category" value={mediaData.category} onChange={handleMediaDataChange} /></label><br />
                 <label>Price: <input className="border rounded p-2 w-full" type="number" name="price" value={mediaData.price} onChange={handleMediaDataChange} /></label><br />
                 <label>Quantity: <input className="border rounded p-2 w-full" type="number" name="quantity" value={mediaData.quantity} onChange={handleMediaDataChange} /></label><br />
                 <label>Weight: <input className="border rounded p-2 w-full" type="number" step="0.01" name="weight" value={mediaData.weight} onChange={handleMediaDataChange} /></label><br />

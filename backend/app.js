@@ -21,10 +21,10 @@ const Media = require('./models/Media');
 const Role = require('./models/Role');
 const RushDeliveryInfo = require('./models/RushDeliveryInfo');
 const Track = require('./models/Track');
+const cors = require('cors');
 
-
-
-
+// Cấu hình CORS cho ứng dụng
+app.use(cors());  // Cài đặt CORS mặc định cho tất cả các routes
 
 // Thiết lập mối quan hệ giữa Invoice và Order
 Invoice.belongsTo(Order, { foreignKey: 'orderId' });
