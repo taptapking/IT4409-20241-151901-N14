@@ -164,7 +164,7 @@ static async getById(req, res) {
      // Cập nhật imageUrl thành URL đầy đủ
     const fullMediaItem = {
       ...mediaItem.dataValues,  // Giữ lại các trường hiện tại
-      imageUrl: `${req.protocol}://${req.get('host')}/uploads/${mediaItem.imageUrl}`  // Thêm URL đầy đủ
+      imageUrl: `${req.protocol}://${req.get('host')}${mediaItem.imageUrl}`  // Thêm URL đầy đủ
     };
 
       return res.status(200).json({ mediaItem: fullMediaItem, specificData });
