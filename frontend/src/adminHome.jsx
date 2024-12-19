@@ -7,11 +7,6 @@ function AdminHome() {
         <div className="admin-container">
             <h2 className="auth-title">Admin panel</h2>
             <p className="auth-subtitle">Select one of the following features</p>
-            <button className="view-products">
-                View all products
-            </button>
-            <br />
-            <br />
             <button className="view-orders">
                 View all orders
             </button>
@@ -27,6 +22,14 @@ function AdminHome() {
                     Add products
                 </button>
             </Link>
+            <br/>
+            <br/>
+            <Link to="/admin/modifyproducts">
+                <button className="modify-products"> 
+                    Modify products
+                </button>
+            </Link>
+            
         </div>
     )
 }
