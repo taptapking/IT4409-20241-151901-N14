@@ -1,5 +1,5 @@
 const express = require('express');
-//const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/auth');
 // const User = require('../models/User');
 // const orderRoutes = require('./routes/order');
 // const paymentRoutes = require('./routes/payment');
@@ -58,7 +58,7 @@ app.use('/api/accounts', accountRoutes);
 app.use('/api/orders', adminOrderRoutes);  // Cấu hình prefix /api/orders cho tất cả các route trong orderRoutes
 
 // Sử dụng auth routes cho các endpoint xác thực
-//app.use('/api', authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use('/api', orderRoutes);
 // app.use('/api', paymentRoutes);
 

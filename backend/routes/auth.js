@@ -1,15 +1,13 @@
 // routes/auth.js
 const express = require('express');
-const AuthController = require('../controllers/authController');
-
 const router = express.Router();
+const authController = require('../controllers/authController');
+const authenticate = require('../middleware/authenticate');
 
-router.post('/login', AuthController.login);
-router.post('/logout', AuthController.logout);
+// Route Đăng Nhập
+router.post('/login', authController.login);
 
-// Protected route for admins
-router.get('/admin-only', verifyToken, requireRole('admin'), (req, res) => {
-    res.status(200).json({ message: 'Welcome, admin!' });
-});
+// Route Đăng Xuất
+router.post('/logout', authenticate, authController.logout);
 
 module.exports = router;
