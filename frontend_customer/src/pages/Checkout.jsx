@@ -12,8 +12,7 @@ function Checkout({ accountId, token }) {
         address: "",
         phone: "",
         city: "",
-        postalCode: "",
-        country: "",
+
         instruction: "",
         rushInstruction: "",
         paymentMethod: "card",
@@ -26,8 +25,6 @@ function Checkout({ accountId, token }) {
         phone: '',
         address: '',
         city: '',
-        postalCode: '',
-        country: '',
         instruction: '',
     });
     const mediaTotal = total.toFixed(2);

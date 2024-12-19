@@ -61,9 +61,11 @@ function Cart({ cart, removeFromCart, updateQuantity }) {
             <div className="cart-total">
                 <h3>Total: ${localTotalPrice.toFixed(2)}</h3>
             </div>
-            <button onClick={handleCheckout} className="checkout-button">
+            {cart.length > 0 && (
+                <button onClick={handleCheckout} className="checkout-button">
                     Proceed to Payment
                 </button>
+            )}
         </div>
     );
 }
