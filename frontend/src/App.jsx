@@ -13,6 +13,8 @@ import SignIn from "./SignIn";
 import AdminHome from "./adminHome";
 import ProductForm from "./addProducts";
 import ProductList from "./modifyProducts";
+import UserForm from "./addUsers";
+import UserManagement from "./viewallusers";
 
 function App() {
     const [cart, setCart] = useState([]);
@@ -93,6 +95,8 @@ function App() {
                     
                             <Route path="/admin/addproducts" element={<ProductForm/>}/>
                             <Route path="/admin/modifyproducts" element={<ProductList/>}/>
+                            <Route path="/admin/addusers" element={<UserForm/>}/>
+                            <Route path="/admin/viewallusers" element={<UserManagement/>}/>
                         </Routes>
                     </div>
                 </div>
