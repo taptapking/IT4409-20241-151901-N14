@@ -12,9 +12,11 @@ function AdminHome() {
             </button>
             <br />
             <br />
-            <button className="view-accounts">
-                View all accounts
-            </button>
+            <Link to="/admin/viewallusers">
+                <button className="view-accounts">
+                    View all accounts
+                </button>
+            </Link>
             <br/>
             <br/>
             <Link to="/admin/addproducts">
@@ -27,6 +29,13 @@ function AdminHome() {
             <Link to="/admin/modifyproducts">
                 <button className="modify-products"> 
                     Modify products
+                </button>
+            </Link>
+            <br/>
+            <br/>
+            <Link to="/admin/addusers">
+                <button className="add-users"> 
+                    Add users
                 </button>
             </Link>
             
