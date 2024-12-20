@@ -12,4 +12,5 @@ router.put('/approve/:orderId', Orders.approveOrder);
 
 // Route để reject đơn hàng
 router.put('/reject/:orderId', Orders.rejectOrder);
+router.post('/',  Orders.createOrder);
 module.exports = router;

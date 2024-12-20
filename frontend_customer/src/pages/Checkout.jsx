@@ -1,18 +1,18 @@
 import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import API_URL from "../config/apiConfig";
 
-function Checkout({ accountId, token }) {
+function Checkout() {
     const location = useLocation();
     const { cart, total } = location.state || {};
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         address: "",
         phone: "",
         city: "",
-
         instruction: "",
         rushInstruction: "",
         paymentMethod: "card",
@@ -20,49 +20,10 @@ function Checkout({ accountId, token }) {
         cardDetails: "",
     });
 
-    const [deliveryInfo, setDeliveryInfo] = useState({
-        name: '',
-        phone: '',
-        address: '',
-        city: '',
-        instruction: '',
-    });
     const mediaTotal = total.toFixed(2);
     const VATAmount = (total / 10).toFixed(2);
     const finalTotal = (parseFloat(mediaTotal) + parseFloat(VATAmount)).toFixed(2);
 
-    const [loading, setLoading] = useState(true);
-
-    // Fetch delivery information based on accountId
-    useEffect(() => {
-        axios
-            .get(`${API_URL}/account/${accountId}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            })
-            .then((response) => {
-                const accountDeliveryInfo = response.data.account.DeliveryInfo || {};
-                setDeliveryInfo(accountDeliveryInfo);
-                // Pre-fill formData with the fetched delivery info
-                setFormData({
-                    ...formData,
-                    name: accountDeliveryInfo.name || "",
-                    email: response.data.account.email || "",
-                    address: accountDeliveryInfo.address || "",
-                    phone: accountDeliveryInfo.phone || "",
-                    city: accountDeliveryInfo.city || "",
-                    postalCode: accountDeliveryInfo.postalCode || "",
-                    country: accountDeliveryInfo.country || "",
-                    instruction: accountDeliveryInfo.instruction || "",
-                });
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error fetching account data:", error);
-                setLoading(false);
-            });
-    }, [accountId, token]);
-
-    // Handle input changes
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData((prevData) => ({
@@ -71,46 +32,43 @@ function Checkout({ accountId, token }) {
         }));
     };
 
-    // Handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Preparing order data for submission
-        const rushOrderDetails = formData.transportMethod === "fast" ? {
-            rushInstruction: formData.rushInstruction,
-        } : null;
+        const rushOrderDetails =
+            formData.transportMethod === "fast"
+                ? { rushInstruction: formData.rushInstruction }
+                : null;
 
         const orderData = {
-            accountId:accountId,
             deliveryInfo: {
-                name: formData.name || deliveryInfo.name,
-                email: formData.email || deliveryInfo.email,
-                address: formData.address || deliveryInfo.address,
-                phone: formData.phone || deliveryInfo.phone,
-                city: formData.city || deliveryInfo.city,
-                instruction: formData.instruction || deliveryInfo.instruction,
+                name: formData.name,
+                email: formData.email,
+                address: formData.address,
+                phone: formData.phone,
+                city: formData.city,
+                instruction: formData.instruction,
             },
             invoiceDetails: {
                 mediaTotal: mediaTotal,
                 vat: VATAmount,
                 total: finalTotal,
             },
-            rushDeliveryInfo: rushOrderDetails, // Will be null or contain rushInstruction
-            mediaDetails: cart.map(item => ({
-                mediaId: item.id, // Using item.id as mediaId
-                quantity: item.quantity
+            rushDeliveryInfo: rushOrderDetails,
+            mediaDetails: cart.map((item) => ({
+                mediaId: item.id,
+                quantity: item.quantity,
             })),
             status: "pending",
         };
 
         try {
-            const response = await axios.post(`${API_URL}/orders`, orderData, {
-                headers: { Authorization: `Bearer ${token}` },
+            const response = await axios.post(`${API_URL}/orders/makeorders`, orderData, {
             });
-            console.log('Order placed successfully:', response.data);
+            console.log("Order placed successfully:", response.data);
             alert("Order placed successfully!");
         } catch (error) {
-            console.error('Error placing order:', error);
+            console.error("Error placing order:", error);
             alert("There was an error placing your order.");
         }
     };
@@ -124,7 +82,7 @@ function Checkout({ accountId, token }) {
                     <input
                         type="text"
                         name="name"
-                        value={formData.name || deliveryInfo.name}
+                        value={formData.name}
                         onChange={handleChange}
                         required
                     />
@@ -134,7 +92,7 @@ function Checkout({ accountId, token }) {
                     <input
                         type="email"
                         name="email"
-                        value={formData.email || deliveryInfo.email}
+                        value={formData.email}
                         onChange={handleChange}
                         required
                     />
@@ -143,7 +101,7 @@ function Checkout({ accountId, token }) {
                     <label>Address:</label>
                     <textarea
                         name="address"
-                        value={formData.address || deliveryInfo.address}
+                        value={formData.address}
                         onChange={handleChange}
                         required
                     />
@@ -153,7 +111,7 @@ function Checkout({ accountId, token }) {
                     <input
                         type="text"
                         name="phone"
-                        value={formData.phone || deliveryInfo.phone}
+                        value={formData.phone}
                         onChange={handleChange}
                         required
                     />
@@ -163,7 +121,7 @@ function Checkout({ accountId, token }) {
                     <input
                         type="text"
                         name="city"
-                        value={formData.city || deliveryInfo.city}
+                        value={formData.city}
                         onChange={handleChange}
                         required
                     />
@@ -172,7 +130,7 @@ function Checkout({ accountId, token }) {
                     <label>Instructions:</label>
                     <textarea
                         name="instruction"
-                        value={formData.instruction || deliveryInfo.instruction}
+                        value={formData.instruction}
                         onChange={handleChange}
                     />
                 </div>
@@ -212,7 +170,6 @@ function Checkout({ accountId, token }) {
                         <option value="fast">Fast</option>
                     </select>
                 </div>
-
                 {formData.transportMethod === "fast" && (
                     <div className="form-group">
                         <label>Rush Instruction:</label>
@@ -224,10 +181,10 @@ function Checkout({ accountId, token }) {
                         />
                     </div>
                 )}
-
-                <button type="submit" className="submit-button">Place Order</button>
+                <button type="submit" className="submit-button">
+                    Place Order
+                </button>
             </form>
-
             <div className="order-summary">
                 <h3>Order Summary</h3>
                 <ul>

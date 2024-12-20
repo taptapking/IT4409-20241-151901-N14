@@ -3,6 +3,7 @@ const Invoice = require('../models/Invoice');
 const DeliveryInfo = require('../models/DeliveryInfo');
 const RushDeliveryInfo = require('../models/RushDeliveryInfo');
 const Media = require('../models/Media');
+const sequelize = require('../config/db');
 require('dotenv').config();  // Load biến môi trường từ file .env
 const nodemailer = require('nodemailer');
 const getAllOrders = async (req, res) => {
@@ -98,15 +99,67 @@ const getOrderById = async (req, res) => {
 
 
 const createOrder = async (req, res) => {
-    try {
-        const { status } = req.body;
-        const newOrder = await Order.create({ status });
+  const t = await sequelize.transaction();
 
-        res.status(201).json(newOrder);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to create order' });
-    }
+  try {
+      const { status, deliveryInfo, invoiceDetails, rushDeliveryInfo, mediaDetails } = req.body;
+
+      let mediaTotal = 0;
+      for (const media of mediaDetails) {
+          const mediaItem = await Media.findByPk(media.mediaId, { transaction: t });
+          if (!mediaItem) {
+              await t.rollback();
+              return res.status(404).json({ error: `Media item with ID ${media.mediaId} not found` });
+          }
+          mediaTotal += mediaItem.price * media.quantity;
+      }
+
+      const vat = mediaTotal * 0.1;
+      const total = mediaTotal + vat;
+
+      const newOrder = await Order.create(
+          { status},
+          { transaction: t }
+      );
+
+      const newDeliveryInfo = await DeliveryInfo.create(
+          { ...deliveryInfo, orderId: newOrder.id },
+          { transaction: t }
+      );
+
+      const newInvoice = await Invoice.create(
+          { ...invoiceDetails, orderId: newOrder.id, deliveryInfoId: newDeliveryInfo.id ,vat,total,mediaTotal},
+          { transaction: t }
+      );
+
+      const newOrderMedia = await OrderMedia.bulkCreate(
+          mediaDetails.map(media => ({
+              orderId: newOrder.id,
+              mediaId: media.mediaId,
+              quantity: media.quantity,
+              price: media.quantity * mediaDetails.find(md => md.mediaId === media.mediaId).price,
+          })),
+          { transaction: t }
+      );
+
+      await t.commit();
+
+      res.status(201).json({
+          order: newOrder,
+          deliveryInfo: newDeliveryInfo,
+          invoice: newInvoice,
+          rushOrderInfo: newDeliveryInfo,
+          orderMedia: newOrderMedia,
+          mediaTotalPrice,
+          vat,
+          total,
+      });
+  } catch (error) {
+      await t.rollback();
+      res.status(500).json({ error: error.message });
+  }
 };
+
 
 const updateOrder = async (req, res) => {
     try {
