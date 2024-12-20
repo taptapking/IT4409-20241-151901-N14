@@ -9,7 +9,7 @@ const UserManagement = () => {
         status: '',
         roles: [],
     });
-    const [oldPassword, setOldPassword] = useState('');  // To store the old password
+    const [oldPassword, setOldPassword] = useState(''); // To store the old password
 
     // Fetch all users
     useEffect(() => {
@@ -17,22 +17,18 @@ const UserManagement = () => {
             try {
                 const response = await fetch('http://localhost:3000/api/accounts');
                 const data = await response.json();
-    
-                // Check if data.accounts is an array before calling setUsers
+
                 if (Array.isArray(data.accounts)) {
                     setUsers(data.accounts);
                 } else {
                     console.error('Expected data.accounts to be an array', data);
-                    setUsers([]); // Set users to an empty array if the format is incorrect
                 }
             } catch (error) {
                 console.error('Error fetching users:', error);
-                setUsers([]); // Ensure we don't try to map over undefined
             }
         };
         fetchUsers();
     }, []);
-    
 
     const handleDelete = async (id) => {
         try {
@@ -50,20 +46,40 @@ const UserManagement = () => {
         }
     };
 
+    const handleBlockUnblock = async (id, action) => {
+        try {
+            const url = `http://localhost:3000/api/accounts/${action}/${id}`;
+            const response = await fetch(url, { method: 'PUT' });
+
+            if (response.ok) {
+                setUsers(
+                    users.map((user) =>
+                        user.id === id
+                            ? { ...user, status: action === 'block' ? 'blocked' : 'active' }
+                            : user
+                    )
+                );
+            } else {
+                console.error(`Failed to ${action} user`);
+            }
+        } catch (error) {
+            console.error(`Error trying to ${action} user:`, error);
+        }
+    };
+
     const handleEditClick = (user) => {
         setEditUser(user.id);
         setEditFormData({
             email: user.email,
-            password: '', // password is empty initially
+            password: '', // Password is empty initially
             status: user.status,
             roles: user.Roles.map((role) => role.roleName),
         });
     };
-    
 
     const handleInputChange = (e) => {
         const { name, value, checked } = e.target;
-    
+
         if (name === 'roles') {
             setEditFormData((prevData) => {
                 const updatedRoles = checked
@@ -78,47 +94,30 @@ const UserManagement = () => {
             }));
         }
     };
-    
-    
 
     const handleUpdate = async () => {
         try {
             const formData = new FormData();
-    
-            // Log editFormData before sending
-            console.log('Form data before sending:', editFormData);
-    
+
             formData.append('email', editFormData.email);
             formData.append('password', editFormData.password || oldPassword); // Send old password if empty
             formData.append('status', editFormData.status);
-    
-            // Log roles to ensure they're populated correctly
-            if (editFormData.roles.length === 0) {
-                console.log('No roles selected!');
-            } else {
-                editFormData.roles.forEach((role) => {
-                    console.log('Appending role:', role);
-                    formData.append('roles', role);
-                });
-            }
-    
-            // Send the request to the server
+
+            editFormData.roles.forEach((role) => {
+                formData.append('roles', role);
+            });
+
             const response = await fetch(`http://localhost:3000/api/accounts/${editUser}`, {
                 method: 'PUT',
                 body: formData,
             });
-    
+
             if (response.ok) {
                 const updatedUser = await response.json();
-    
-                // Log the updated user data
-                console.log('Updated user data received from server:', updatedUser);
-    
-                // Update the users state with the updated user
+
                 setUsers(users.map((user) => (user.id === editUser ? updatedUser : user)));
-    
-                // Reset the edit state
-                setEditUser(null);
+
+                setEditUser(null); // Reset edit state
             } else {
                 console.error('Failed to update user');
             }
@@ -126,11 +125,6 @@ const UserManagement = () => {
             console.error('Error updating user:', error);
         }
     };
-    
-    
-    
-    
-    
 
     return (
         <div className="p-6 max-w-4xl mx-auto">
@@ -145,40 +139,51 @@ const UserManagement = () => {
                     </tr>
                 </thead>
                 <tbody>
-    {Array.isArray(users) && users.length > 0 ? (
-        users.map((user) => (
-            <tr key={user.id} className="border-t">
-                <td className="border border-gray-300 px-4 py-2">{user.email}</td>
-                <td className="border border-gray-300 px-4 py-2">{user.status}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                    {Array.isArray(user.Roles) && user.Roles.length > 0
-                    ? user.Roles.map((role) => role.roleName).join(', ')
-                    : 'No roles assigned'}
-                </td>
-
-                <td className="border border-gray-300 px-4 py-2">
-                    <button
-                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-2"
-                        onClick={() => handleEditClick(user)}
-                    >
-                        Edit
-                    </button>
-                    <button
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                        onClick={() => handleDelete(user.id)}
-                    >
-                        Delete
-                    </button>
-                </td>
-            </tr>
-        ))
-    ) : (
-        <tr>
-            <td colSpan="4" className="text-center py-4">No users found.</td>
-        </tr>
-    )}
-</tbody>
-
+                    {Array.isArray(users) && users.length > 0 ? (
+                        users.map((user) => (
+                            <tr key={user.id} className="border-t">
+                                <td className="border border-gray-300 px-4 py-2">{user.email}</td>
+                                <td className="border border-gray-300 px-4 py-2">{user.status}</td>
+                                <td className="border border-gray-300 px-4 py-2">
+                                    {Array.isArray(user.Roles) && user.Roles.length > 0
+                                        ? user.Roles.map((role) => role.roleName).join(', ')
+                                        : 'No roles assigned'}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-2">
+                                    <button
+                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-2"
+                                        onClick={() => handleEditClick(user)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mr-2"
+                                        onClick={() => handleDelete(user.id)}
+                                    >
+                                        Delete
+                                    </button>
+                                    <button
+                                        className={`${user.status === 'active'
+                                                ? 'bg-yellow-500 hover:bg-yellow-600'
+                                                : 'bg-green-500 hover:bg-green-600'
+                                            } text-white px-3 py-1 rounded`}
+                                        onClick={() =>
+                                            handleBlockUnblock(user.id, user.status === 'active' ? 'block' : 'unblock')
+                                        }
+                                    >
+                                        {user.status === 'active' ? 'Block' : 'Unblock'}
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="4" className="text-center py-4">
+                                No users found.
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
             </table>
 
             {editUser && (
